@@ -3,9 +3,9 @@
 
 ## Properties File
 
-1.-Modify the database connection properties.
-2.-Change file.path property, in that path will be created the file that contains execution times.
-3.-Change file.name property, Is the name of the file that contains execution times (OPTIONAL)
+1. Modify the database connection properties.
+2. Change file.path property, in that path will be created the file that contains execution times.
+3. Change file.name property, Is the name of the file that contains execution times (OPTIONAL)
 
 To run the program:
 ```
