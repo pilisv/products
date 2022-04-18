@@ -1,0 +1,71 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+    <changeSet id="1.0" author="psv">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="brands"/>
+            </not>
+        </preConditions>
+        <createTable tableName="brands">
+            <column name="id_brand" type="numeric(5)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(50)"/>
+            <column name="made_in" type="varchar(50)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="1.1" author="psv">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from brands</sqlCheck>
+        </preConditions>
+        <sqlFile path="db/brands.sql"/>
+    </changeSet>
+    <changeSet id="2.0" author="psv">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="products_seq"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="products_seq"/>
+    </changeSet>
+    <changeSet id="2.1" author="psv">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="products"/>
+            </not>
+        </preConditions>
+        <createTable tableName="products">
+            <column name="id" type="numeric(8)" defaultValueSequenceNext="products_seq">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(100)"/>
+            <column name="price" type="numeric(19,2)"/>
+            <column name="quantity" type="numeric(8)"/>
+            <column name="id_brand" type="numeric(5)">
+                <constraints referencedTableName="brands" referencedColumnNames="id_brand"
+                             foreignKeyName="products_brands_fk"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="3.0" author="psv">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="products_detail"/>
+            </not>
+        </preConditions>
+        <createTable tableName="products_detail">
+            <column name="id_product" type="numeric(8)">
+                <constraints foreignKeyName="products_pdetail_fk" referencedTableName="products"
+                             referencedColumnNames="id" primaryKey="true"/>
+            </column>
+            <column name="description" type="varchar(250)"/>
+            <column name="color" type="varchar(50)"/>
+            <column name="width" type="double"/>
+            <column name="high" type="double"/>
+            <column name="large" type="double"/>
+            <column name="weight" type="double"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
